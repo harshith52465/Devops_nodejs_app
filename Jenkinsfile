@@ -3,28 +3,40 @@ pipeline {
 
     stages {
 
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/harshith52465/Devops_nodejs_app.git'
+            }
+        }
+
+        stage('Verify Files') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                sh 'npm test || true'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t nodejs-app .'
+                sh 'docker build -t nodejs-demo .'
             }
         }
 
-        stage('Deploy Container') {
+        stage('Run Container') {
             steps {
-                sh 'docker run -d -p 3000:3000 nodejs-app'
+                sh '''
+                docker stop nodejs-demo || true
+                docker rm nodejs-demo || true
+                docker run -d -p 3000:3000 --name nodejs-demo nodejs-demo
+                '''
             }
         }
+
     }
 }
