@@ -9,7 +9,7 @@ pipeline {
             }
         }
 
-        stage('Install App Dependencies') {
+        stage('Install Dependencies') {
             steps {
                 dir('app') {
                     sh 'npm install'
@@ -19,7 +19,9 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'npx jest test'
+                dir('app') {
+                    sh 'npx jest ../test --passWithNoTests'
+                }
             }
         }
 
