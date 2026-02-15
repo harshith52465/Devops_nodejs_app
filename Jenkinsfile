@@ -3,16 +3,33 @@ pipeline {
 
     stages {
 
-        stage('Verify Files') {
+        stage('Checkout Code') {
             steps {
-                sh 'pwd'
+                checkout scm
+            }
+        }
+
+        stage('Verify Project Structure') {
+            steps {
                 sh 'ls -la'
+                sh 'ls -la app'
+                sh 'ls -la test'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                dir('app') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                dir('app') {
+                    sh 'npm test'
+                }
             }
         }
 
@@ -22,7 +39,7 @@ pipeline {
             }
         }
 
-        stage('Run Container') {
+        stage('Run Docker Container') {
             steps {
                 sh '''
                 docker stop nodejs-demo || true
@@ -31,6 +48,5 @@ pipeline {
                 '''
             }
         }
-
     }
 }
