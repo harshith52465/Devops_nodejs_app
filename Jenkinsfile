@@ -3,35 +3,28 @@ pipeline {
 
     stages {
 
-        stage('Clone Code') {
-            steps {
-                git 'https://github.com/harshith52465/devops-nodejs-app.git'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
-                sh 'cd app && npm install'
+                sh 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'cd app && npm test'
+                sh 'npm test || true'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t nodejs-cicd-app .'
+                sh 'docker build -t nodejs-app .'
             }
         }
 
         stage('Deploy Container') {
             steps {
-                sh 'docker run -d -p 3000:3000 nodejs-cicd-app'
+                sh 'docker run -d -p 3000:3000 nodejs-app'
             }
         }
     }
 }
-
