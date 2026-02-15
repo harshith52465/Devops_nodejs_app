@@ -3,12 +3,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/harshith52465/Devops_nodejs_app.git'
-            }
-        }
-
         stage('Verify Files') {
             steps {
                 sh 'pwd'
