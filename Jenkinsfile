@@ -5,7 +5,7 @@ pipeline {
 
         stage('Clone Code') {
             steps {
-                git 'https://github.com/YOUR-USERNAME/devops-nodejs-app.git'
+                git 'https://github.com/harshith52465/devops-nodejs-app.git'
             }
         }
 
