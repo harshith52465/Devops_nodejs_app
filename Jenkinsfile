@@ -9,15 +9,7 @@ pipeline {
             }
         }
 
-        stage('Verify Project Structure') {
-            steps {
-                sh 'ls -la'
-                sh 'ls -la app'
-                sh 'ls -la test'
-            }
-        }
-
-        stage('Install Dependencies') {
+        stage('Install App Dependencies') {
             steps {
                 dir('app') {
                     sh 'npm install'
@@ -27,25 +19,19 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                dir('app') {
-                    sh 'npm test'
-                }
+                sh 'npx jest test'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t nodejs-demo .'
+                sh 'docker build -t node-app .'
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                sh '''
-                docker stop nodejs-demo || true
-                docker rm nodejs-demo || true
-                docker run -d -p 3000:3000 --name nodejs-demo nodejs-demo
-                '''
+                sh 'docker run -d -p 3000:3000 node-app'
             }
         }
     }
